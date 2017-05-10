@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <title>Sci-Fi Novels</title>
+        <link rel="stylesheet" href="css/bootstrap.min.css"/>
+        <link rel="stylesheet" href="css/toastr.min.css"/>
+        <link rel="stylesheet" href="css/style.css"/>
+    </head>
+    <body>
+        <div id="page">
+            <header class="container">
+                <div id="navbar" class="nav navbar-default navbar-fixed-top">
+                    <ul class="nav navbar-nav">
+                        
+                        <li class="nav">
+                            <form id="byGenreForm" class="navbar-form">
+                                <div class="form-group">
+                                    <select data-bind="options: genres, value: chooseByGenre"
+                                            id="chooseGenre"
+                                            class="form-control"></select>
+                                </div>
+                            </form>
+                        </li>
+                        
+                        <li class="nav">
+                            <form id="searchForm" class="navbar-form" role="form">
+                                <div class="form-group has-feedback">
+                                    <input data-bind="value: searchString" type="text" class="form-control" placeholder="Search (ignores genre)">
+                                    <i class="form-control-feedback glyphicon glyphicon-search"></i>
+                                </div>
+                            </form>
+                        </li>
+                        
+                        <li><a href="" id="showAddModalbtn" data-toggle="modal"><span class="glyphicon glyphicon-plus"></span>      Add Book</a></li>
+                        <li><a href="" id="showAllNovelsbtn"><span class="glyphicon glyphicon-list"></span>      Show All Books</a></li>
+                        <li><a href="" id="resetNovelsbtn"><span class="glyphicon glyphicon-refresh"></span>      Reset Book List</a></li>
+                                
+                    </ul>
+                    
+                    <ul class="nav navbar-nav navbar-right">
+                        <li><a href="pdf/research.pdf"><span class="glyphicon glyphicon-list-alt"></span>   Paper</a></li>
+                        <li><a href="pdf/presentation.pdf"><span class="glyphicon glyphicon-blackboard"></span>   Presentation</a></li>
+                        <li><a href="https://ie.linkedin.com/in/martinzuber"><span class="glyphicon glyphicon-envelope"></span>   LinkedIn</a></li>
+                    </ul>
+                    
+                </div>
+            </header>
+            <section id="body" class="container">
+                <section id="main">
+                    
+                    <table id="booksTable" class="table table-responsive col-lg-12">
+                        
+                        <thead>
+                            <tr>
+                                <th class="col-lg-2">Author</th>
+                                <th class="col-lg-2">Title</th>
+                                <th class="col-lg-2">Genre</th>
+                                <th>Published</th>
+                                <th>Price</th>
+                                <th class="col-lg-6">Description</th>
+                                <th></th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        
+                        <tbody data-bind="foreach: bookList" id="booksTableBody">
+                            <tr>
+                                <td data-bind="text: author" class="text-info"></td>
+                                <td data-bind="text: title" class="text-danger"></td>
+                                <td data-bind="text: genre" class="text-success"></td>
+                                <td data-bind="text: year"></td>
+                                <td data-bind="text: price"></td>
+                                <td data-bind="text: description"></td>
+                                <td>
+                                    <button class="btn btn-primary pull-right">
+                                        <span class="glyphicon glyphicon-edit"></span>   Edit
+                                    </button>
+                                </td>
+                                <td>
+                                    <button class="btn btn-danger pull-right">
+                                        <span class="glyphicon glyphicon-trash"></span>   Delete</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                        
+                    </table>    
+                    
+                </section><!-- end of "main" section -->
+                
+                <!-- Add Nove Modal -->
+                <div id="bookModal" class="modal fade" role="dialog">
+                    <div class="modal-dialog">
+                        <div id="modal_content" class="modal-content">
+
+                            <!-- modal header -->
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                <h4 data-bind="text: modalTitle" class="modal-title"></h4>
+                            </div>
+
+                            <!-- modal body -->
+                            <div class="modal-body">
+                                <form id="modalForm" class="form-horizontal" action="">
+                                    <fieldset>
+
+                                        <div class="form-group">
+                                            <label for="authorInput"
+                                                   class="control-label col-lg-1 col-md-1 col-sm-1 col-xs-1">Author</label>
+                                            <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5">
+                                                <input data-bind="value: currentBook().author, valueUpdate: 'afterkeydown'" 
+                                                       id="authorInput"
+                                                       type="text"
+                                                       class="form-control"
+                                                       placeholder="e. g. authors name"
+                                                       required/>
+                                            </div>
+                                            <label for="titleInput"
+                                                   class="control-label col-lg-1 col-md-1 col-sm-1 col-xs-1">Title</label>
+                                            <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5">
+                                                <input data-bind="value: currentBook().title, valueUpdate: 'afterkeydown'" 
+                                                       id="titleInput"
+                                                       type="text"
+                                                       class="form-control"
+                                                       placeholder="e. g. title"
+                                                       required/>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="genreInput" 
+                                                   class="control-label col-lg-1 col-md-1 col-sm-1 col-xs-1">Genre</label>
+                                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                                                <select data-bind="options: genres, value: currentBook().genre"
+                                                        id="genreInput"
+                                                        class="form-control"></select>
+                                            </div>
+                                                <label for="yearInput"
+                                                       class="control-label col-lg-1 col-md-1 col-sm-1 col-xs-1">Year</label>
+                                                <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
+                                                    <input data-bind="value: currentBook().year, valueUpdate: 'afterkeydown'"
+                                                           id="yearInput"
+                                                           type="number"
+                                                           class="form-control"
+                                                           placeholder="e. g. published"
+                                                           size="4"
+                                                           min="0"
+                                                           max="9999"/>
+                                                </div>
+
+                                            <label for="priceInput"
+                                                   class="control-label col-lg-1 col-md-1 col-sm-1 col-xs-1">Price</label>
+                                            <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2">
+                                                <input data-bind="value: currentBook().price, valueUpdate: 'afterkeydown'"
+                                                       id="priceInput"
+                                                       type="text"
+                                                       class="form-control"
+                                                       placeholder="e. g. price"
+                                                       pattern="[0-9]+(\.[0-9][0-9]?)?"/>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="descriptionArea"
+                                                   class="control-label col-lg-2 col-md-2 col-sm-2 col-xs-2">Description</label>
+                                            <div class="col-lg-10 col-md-10 col-sm-10 col-xs-10">
+                                                <textarea data-bind="value: currentBook().description, valueUpdate: 'afterkeydown'"
+                                                          id="descriptionArea"
+                                                          rows="6"
+                                                          class="form-control"
+                                                          placeholder="e.g. little description or a review"></textarea>
+                                            </div>
+                                        </div>
+                                    </fieldset>
+                                </form>   
+                            </div><!-- end of modal body -->
+                            <!-- modal footer -->
+                            <div class="modal-footer">
+
+                                <button type="button" class="btn btn-danger" data-dismiss="modal">
+                                    <span class="glyphicon glyphicon-backward"></span>   Cancel
+                                </button>
+
+                                <button id="addBookbtn" type="button" class="btn btn-primary">
+                                    <span class="glyphicon glyphicon-ok"></span>   Submit</button>
+
+                                <button id="editBookbtn" type="button" class="btn btn-primary">
+                                    <span class="glyphicon glyphicon-ok"></span>    Submit</button>
+
+                            </div><!-- end of modal footer -->
+                        </div>
+                    </div>
+                </div><!-- end of Add Novel modal -->
+                
+            </section><!-- end of "body" section -->
+            
+            <footer class="container">
+                <div class="nav navbar-default navbar-fixed-bottom">
+                    <p class="text-center">Created by <strong>Martin Zuber</strong>, student number: <strong>B00066378</strong><p>
+                </div>
+            </footer>
+            
+        </div>
+        
+        <script src='scripts/jquery-2.2.1.min.js'></script>
+        <script src="scripts/bootstrap.min.js"></script>
+        <script src='scripts/knockout-3.4.0.min.js'></script>
+        <script src='scripts/toastr.min.js'></script>
+        <script src='scripts/Books.js'></script>
+    </body>
+</html>
